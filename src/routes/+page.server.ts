@@ -1,7 +1,7 @@
-import { loadFlags, parseFlagCSV } from '$lib';
+import { flagCodes } from '$lib';
 
 export const load = async () => {
-	const flags = parseFlagCSV(await loadFlags());
+	const flags = flagCodes;
 	return {
 		flags
 	};

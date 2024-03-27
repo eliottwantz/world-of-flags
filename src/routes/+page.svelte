@@ -6,6 +6,8 @@
 	<title>World of Flags</title>
 </svelte:head>
 
-<pre>
-	{JSON.stringify(data.flags, null, 2)}
-</pre>
+<main>
+	<pre>
+		{JSON.stringify(data.flags, null, 2)}
+	</pre>
+</main>
