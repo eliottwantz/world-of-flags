@@ -2,18 +2,15 @@
 	import Question from '$lib/components/Question.svelte';
 	import { game } from '$lib/game.svelte';
 
-	let resetClicked = $state(false);
+	let dialog: HTMLDialogElement;
 
-	function handleReset() {
-		if (!resetClicked) {
-			resetClicked = true;
-			setTimeout(() => {
-				resetClicked = false;
-			}, 2000);
-		} else {
-			resetClicked = false;
+	function handleFormClose() {
+		console.log('dialog close returned', dialog.returnValue);
+		if (dialog.returnValue === 'confirm') {
 			game.reset();
 		}
+
+		dialog.close();
 	}
 </script>
 
@@ -26,16 +23,10 @@
 		<h1 class="text-center text-5xl font-semibold leading-10">World of Flags</h1>
 		<div class="absolute right-3 top-3">
 			<button
-				class="flex scale-100 transform items-center gap-x-2 rounded-lg border-2 bg-red-400/10 p-2 shadow-md transition duration-100 ease-in-out hover:bg-red-400/20 active:scale-90 {resetClicked
-					? 'border-red-500'
-					: 'border-red-400/40'}"
-				onclick={handleReset}
+				class="flex scale-100 transform items-center gap-x-2 rounded-lg border-2 border-red-500 bg-red-400/10 p-2 shadow-md transition duration-100 ease-in-out hover:bg-red-400/20 active:scale-90"
+				onclick={() => dialog.showModal()}
 			>
-				{#if resetClicked}
-					<span>Reset ???</span>
-				{:else}
-					<span>Reset</span>
-				{/if}
+				<span>Reset</span>
 				<span>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 21 21"
 						><g
@@ -67,3 +58,15 @@
 		</div>
 	</div>
 </main>
+
+<dialog
+	class="absolute inset-0 p-4 backdrop:bg-black/60"
+	bind:this={dialog}
+	on:close={handleFormClose}
+>
+	<h1>Are you sure you want to reset the game?</h1>
+	<form class="mt-4 flex gap-2" method="dialog">
+		<button class="rounded bg-gray-300 p-2" value="cancel" formmethod="dialog">Cancel</button>
+		<button class="rounded bg-red-400 p-2" value="confirm">Confirm</button>
+	</form>
+</dialog>
