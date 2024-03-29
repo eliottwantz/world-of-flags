@@ -17,7 +17,6 @@ export class Game {
 	questions: Question[] = $state<Question[]>([]);
 	right: Question[] = $state<Question[]>([]);
 	wrong: Question[] = $state<Question[]>([]);
-	score: number = $derived(this.right.length);
 
 	constructor() {
 		const fromStorage = localStorage.getItem(this.#storageKey);
