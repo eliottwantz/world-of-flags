@@ -5,6 +5,8 @@
 	let resetDialog: HTMLDialogElement;
 	let incorrectOnlyDialog: HTMLDialogElement;
 
+	const currentQuestion = $derived(game.questions[game.current]);
+
 	function handleIncorrectOnlyResetDialog() {
 		if (incorrectOnlyDialog.returnValue === 'confirm') {
 			game.reset('incorrect-only');
@@ -27,9 +29,9 @@
 </svelte:head>
 
 <main class="mx-auto flex min-h-svh max-w-screen-lg flex-col py-4">
-	<header class="mb-8">
-		<h1 class="text-center text-5xl font-semibold leading-10">World of Flags</h1>
-		<div class="absolute right-3 top-3 flex gap-1">
+	<header class="mb-8 flex flex-col items-center gap-y-4">
+		<h1 class="text-5xl font-semibold leading-10">World of Flags</h1>
+		<div class="flex gap-1">
 			<button
 				class="flex scale-100 transform items-center gap-x-2 rounded-lg border-2 border-red-500 bg-red-400/10 p-2 shadow-md transition duration-100 ease-in-out hover:bg-red-400/20 active:scale-90"
 				onclick={() => incorrectOnlyDialog.showModal()}
@@ -80,7 +82,7 @@
 					<p class="rounded-lg bg-red-500/70 px-2">{game.wrong.length} incorrect</p>
 				</div>
 			</div>
-			<Question question={game.currentQuestion} />
+			<Question question={currentQuestion} />
 		</div>
 	</div>
 </main>
