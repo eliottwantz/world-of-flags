@@ -2,8 +2,10 @@
 	import { game } from '$lib/game.svelte';
 
 	let { question }: { question: Question } = $props();
+	let imageSrc = $derived(`/svg/${question.answer.code}.svg`);
 
-	$inspect(game.currentQuestion);
+	$inspect('imageSrc', imageSrc);
+	// $inspect(game.currentQuestion);
 </script>
 
 <div class="flex flex-col gap-4">
@@ -13,7 +15,7 @@
 			width="400"
 			height="200"
 			class="max-w-xl border-2 border-black/30 p-2"
-			src="/svg/{question.answer.code}.svg"
+			src={imageSrc}
 			alt="flag"
 		/>
 		<div class="grid grid-cols-3 gap-2">

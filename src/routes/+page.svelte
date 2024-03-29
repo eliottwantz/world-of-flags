@@ -82,7 +82,11 @@
 					<p class="rounded-lg bg-red-500/70 px-2">{game.wrong.length} incorrect</p>
 				</div>
 			</div>
-			<Question question={currentQuestion} />
+			{#if game.currentQuestion}
+				<Question question={currentQuestion} />
+			{:else}
+				<p>Game is over</p>
+			{/if}
 		</div>
 	</div>
 </main>
