@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { game } from '$lib/game.svelte';
+	import { base } from '$app/paths';
 </script>
 
 <svelte:head>
@@ -18,7 +19,7 @@
 			<button
 				on:click={() => {
 					game.reset();
-					goto('/game');
+					goto(`${base}/game`);
 				}}
 				class="scale-100 transform rounded-lg border-2 border-yellow-400 bg-yellow-400/10 p-2 shadow-md transition duration-100 ease-in-out hover:bg-yellow-400/20 active:scale-90"
 				>New Game</button
