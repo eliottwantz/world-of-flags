@@ -22,6 +22,11 @@ export class Game {
 		const fromStorage = localStorage.getItem(this.#storageKey);
 		if (fromStorage) {
 			const [questions, current, right, wrong] = fromStorage.split('|');
+			if (!questions || !current || !right || !wrong) {
+				console.log('Bad game state, need to reset');
+				this.reset();
+				return;
+			}
 
 			this.questions = JSON.parse(questions);
 			this.current = parseInt(current);
@@ -96,8 +101,8 @@ export class Game {
 			this.wrong.push(this.currentQuestion);
 		}
 
-		this.#saveState();
 		this.current++;
+		this.#saveState();
 	}
 }
 
