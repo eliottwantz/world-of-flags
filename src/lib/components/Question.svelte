@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { game } from '$lib/game.svelte';
+	import { base } from '$app/paths';
 
 	let { question }: { question: Question } = $props();
-	let imageSrc = $derived(`/svg/${question.answer.code}.svg`);
+	let imageSrc = $derived(`${base}/svg/${question.answer.code}.svg`);
 
-	$inspect('imageSrc', imageSrc);
+	// $inspect('imageSrc', imageSrc);
 	// $inspect(game.currentQuestion);
 </script>
 
