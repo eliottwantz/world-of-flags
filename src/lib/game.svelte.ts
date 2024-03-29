@@ -20,17 +20,16 @@ export class Game {
 	score: number = $derived(this.right.length);
 
 	constructor() {
-		const gameStr = localStorage.getItem('game');
-		if (gameStr !== null) {
-			const game = JSON.parse(gameStr) as Game;
-			this.questions = game.questions;
-			this.current = game.current;
-			this.right = game.right;
-			this.wrong = game.wrong;
-			this.score = game.score;
+		const fromStorage = localStorage.getItem(this.#storageKey);
+		if (fromStorage) {
+			const [questions, current, right, wrong] = fromStorage.split('|');
+
+			this.questions = JSON.parse(questions);
+			this.current = parseInt(current);
+			this.right = JSON.parse(right);
+			this.wrong = JSON.parse(wrong);
 		} else {
-			this.resetGame();
-			this.#generateQuestions();
+			this.reset();
 		}
 	}
 
@@ -68,27 +67,30 @@ export class Game {
 	}
 
 	#saveState() {
-		localStorage.setItem('game', JSON.stringify(this));
+		localStorage.setItem('game', this.toString());
 	}
 
-	resetGame() {
+	toString() {
+		return `${JSON.stringify(this.questions)}|${this.current}|${JSON.stringify(this.right)}|${JSON.stringify(this.wrong)}`;
+	}
+
+	reset() {
 		this.current = 0;
-		this.questions = [];
+		this.questions = this.#generateQuestions();
 		this.right = [];
 		this.wrong = [];
 
-		localStorage.setItem(this.#storageKey, JSON.stringify(this));
+		this.#saveState();
 	}
 
-	selectAnswer(answer: Flag) {
-		if (answer.code === this.currentQuestion.answer.code) {
+	selectAnswer(answer: string) {
+		if (answer === this.currentQuestion.answer.name) {
 			this.right.push(this.currentQuestion);
-			this.#saveState();
 		} else {
 			this.wrong.push(this.currentQuestion);
-			this.#saveState();
 		}
 
+		this.#saveState();
 		this.current++;
 	}
 }

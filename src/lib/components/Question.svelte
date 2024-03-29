@@ -1,11 +1,9 @@
 <script lang="ts">
+	import { game } from '$lib/game.svelte';
+
 	let { question }: { question: Question } = $props();
 
-	function selectAnswer(value: string) {
-		if (question.answer.code === value) {
-			console.log('VALID ANSWER');
-		}
-	}
+	$inspect(game.currentQuestion);
 </script>
 
 <div class="flex flex-col gap-4">
@@ -22,7 +20,7 @@
 			{#each question.choices as choice}
 				<button
 					class="scale-100 transform rounded-lg border-2 border-yellow-400 bg-yellow-400/10 p-2 shadow-md transition duration-100 ease-in-out hover:bg-yellow-400/20 active:scale-90"
-					on:click={() => selectAnswer(choice)}
+					on:click={() => game.selectAnswer(choice)}
 				>
 					{choice}
 				</button>
