@@ -7,13 +7,13 @@
 	<title>World of Flags</title>
 </svelte:head>
 
-<main class="flex min-h-svh max-w-screen-lg flex-col items-center py-4">
+<main class="mx-auto flex min-h-svh max-w-screen-xl flex-col items-center py-4">
 	<header class="mb-8 flex flex-col items-center gap-y-4">
 		<h1 class="text-5xl font-semibold leading-10">World of Flags</h1>
 	</header>
 
-	<div class="flex max-w-md flex-col items-center gap-4">
-		<img class="max-w-md" src="/landing-page.jpg" alt="a lot of flags" />
+	<div class="flex flex-col items-center gap-4">
+		<img class="max-w-lg" src="/landing-page.jpg" alt="a lot of flags" />
 		<div class="flex flex-col gap-2">
 			<button
 				on:click={() => {
