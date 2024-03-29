@@ -1,9 +1,6 @@
 <script lang="ts">
-	import { getQuestions, getScore } from '$lib';
+	import { game } from '$lib/game.svelte';
 	import Question from '$lib/components/Question.svelte';
-
-	let questions = getQuestions();
-	let score = getScore();
 </script>
 
 <svelte:head>
@@ -17,8 +14,13 @@
 
 	<div class="flex h-full items-center justify-center">
 		<div class="flex flex-col items-center gap-y-4">
-			<p class="text-2xl">Score: {score}</p>
-			<Question question={questions[0]} />
+			<!-- <p class="text-2xl">Score: {game.score}</p> -->
+			<!-- <Question question={game.currentQuestion} /> -->
 		</div>
 	</div>
+
+	<pre>
+		{JSON.stringify(game, null, 2)}
+	</pre>
+	<div>{game}</div>
 </main>
