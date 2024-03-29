@@ -73,11 +73,18 @@ export class Game {
 		return `${JSON.stringify(this.questions)}|${this.current}|${JSON.stringify(this.right)}|${JSON.stringify(this.wrong)}`;
 	}
 
-	reset() {
-		this.current = 0;
-		this.questions = this.#generateQuestions();
-		this.right = [];
-		this.wrong = [];
+	reset(mode: 'incorrect-only' | 'default' = 'default') {
+		if (mode === 'incorrect-only') {
+			this.current = 0;
+			this.questions = this.wrong;
+			this.right = [];
+			this.wrong = [];
+		} else {
+			this.current = 0;
+			this.questions = this.#generateQuestions();
+			this.right = [];
+			this.wrong = [];
+		}
 
 		this.#saveState();
 	}
