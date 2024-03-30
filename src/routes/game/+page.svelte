@@ -29,11 +29,10 @@
 </svelte:head>
 
 <main class="mx-auto flex min-h-svh max-w-screen-lg flex-col py-4">
-	<header class="mb-8 flex flex-col items-center gap-y-4">
-		<h1 class="text-5xl font-semibold leading-10">World of Flags</h1>
-		<div class="flex gap-1">
+	<header class="mb-4 flex flex-col items-center gap-y-4">
+		<div class="flex gap-1 px-2">
 			<button
-				class="flex scale-100 transform items-center gap-x-2 rounded-lg border-2 border-red-500 bg-red-400/10 p-2 shadow-md transition duration-100 ease-in-out hover:bg-red-400/20 active:scale-90"
+				class="flex scale-100 transform items-center gap-x-2 rounded-lg border-2 border-red-500 bg-red-400/10 p-2 text-sm shadow-md transition duration-100 ease-in-out hover:bg-red-400/20 active:scale-90"
 				onclick={() => incorrectOnlyDialog.showModal()}
 			>
 				<span>Incorrect answers only</span>
@@ -76,7 +75,7 @@
 			<div class="">
 				<div class="flex gap-2">
 					<p class="rounded-lg bg-gray-200 px-2">
-						Question {game.current}. / {game.questions.length}
+						{game.current}. / {game.questions.length}
 					</p>
 					<p class="rounded-lg bg-green-500 px-2">{game.right.length} correct</p>
 					<p class="rounded-lg bg-red-500/70 px-2">{game.wrong.length} incorrect</p>

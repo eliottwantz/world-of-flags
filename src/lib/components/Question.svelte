@@ -7,9 +7,6 @@
 	let showAnswer = $state(false);
 	let choosed = $state<string | undefined>(undefined);
 
-	$inspect('showAnswer', showAnswer);
-	// $inspect('imageSrc', imageSrc);
-	// $inspect(game.currentQuestion);
 	const handleClick = (choice: string) => {
 		showAnswer = true;
 		choosed = choice;
@@ -24,16 +21,10 @@
 	};
 </script>
 
-<div class="flex flex-col gap-4">
-	<h1 class="text-center text-3xl font-semibold leading-10">What flag is this?</h1>
+<div class="flex flex-col gap-2 sm:gap-4">
+	<h1 class="text-center text-xl font-semibold leading-10 md:text-3xl">What flag is this?</h1>
 	<div class="flex w-full flex-col items-center gap-4">
-		<img
-			width="400"
-			height="200"
-			class="max-w-xl border-2 border-black/30 p-2"
-			src={imageSrc}
-			alt="flag"
-		/>
+		<img class="max-w-xs border-2 border-black/30 p-2 md:max-w-xl" src={imageSrc} alt="flag" />
 		<div class="grid grid-cols-3 gap-2">
 			{#each question.choices as choice}
 				<button
