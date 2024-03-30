@@ -4,10 +4,6 @@
 	import { game } from '$lib/game.svelte';
 </script>
 
-<svelte:head>
-	<title>World of Flags</title>
-</svelte:head>
-
 <main class="mx-auto flex min-h-svh max-w-screen-xl flex-col items-center py-4">
 	<header class="mb-8 flex flex-col items-center gap-y-4">
 		<h1 class="text-5xl font-semibold leading-10">World of Flags</h1>
