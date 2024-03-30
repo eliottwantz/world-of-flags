@@ -100,7 +100,9 @@ export class Game {
 		} else {
 			this.wrong.push(this.currentQuestion);
 		}
+	}
 
+	nextQuestion() {
 		this.current++;
 		this.#saveState();
 	}
