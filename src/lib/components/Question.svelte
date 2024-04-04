@@ -10,14 +10,15 @@
 	let showDatalist = $derived(countryInputValue.length > 0);
 
 	const handleClick = (choice: string) => {
+		game.selectAnswer(choice);
 		showAnswer = true;
 		choosed = choice;
-		game.selectAnswer(choice);
 	};
 
 	const handleInputSubmit = () => {
-		showAnswer = true;
 		game.selectAnswer(countryInputValue);
+		showAnswer = true;
+		choosed = countryInputValue;
 	};
 
 	const nextQuestion = () => {
@@ -31,8 +32,8 @@
 
 <div class="flex flex-col gap-2 sm:gap-4">
 	<h1 class="text-center text-xl font-semibold leading-10 md:text-3xl">What flag is this?</h1>
-	<div class="flex w-full flex-col items-center gap-4">
-		<img class="max-w-xs border-2 border-black/30 p-2 md:max-w-xl" src={imageSrc} alt="flag" />
+	<div class="flex w-full max-w-xs flex-col items-center gap-4 sm:max-w-xl">
+		<img class="border-2 border-black/30 p-2" src={imageSrc} alt="flag" />
 
 		{#if game.mode === 'multiple-choice'}
 			<div class="grid grid-cols-3 gap-2">
@@ -56,12 +57,16 @@
 				{/each}
 			</div>
 		{:else if !showAnswer}
-			<form class="flex flex-col items-center gap-y-2" on:submit|preventDefault={handleInputSubmit}>
-				<div class="relative">
+			<form
+				class="flex w-full flex-col items-center gap-y-2"
+				on:submit|preventDefault={handleInputSubmit}
+			>
+				<div class="relative w-full">
 					<input
 						type="text"
 						list="countries"
 						autocomplete="off"
+						autofocus
 						bind:value={countryInputValue}
 						class="w-full rounded-lg border-yellow-400 bg-yellow-400/10 pe-10 shadow-sm focus:border-yellow-400 focus:ring-yellow-400 sm:text-sm [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-list-button]:hidden [&::-webkit-list-button]:opacity-0"
 					/>
@@ -109,19 +114,22 @@
 		{/if}
 
 		{#if showAnswer}
-			<button
-				disabled={!showAnswer}
-				class="flex scale-100 transform rounded-full border-2 border-gray-400 bg-gray-400/10 p-2 shadow-md transition duration-100 ease-in-out hover:bg-gray-400/20 active:scale-90 disabled:cursor-not-allowed"
-				on:click={nextQuestion}
-			>
-				<span>Next</span>
-				<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
-					><path
-						fill="currentColor"
-						d="M16.15 13H5q-.425 0-.712-.288T4 12q0-.425.288-.712T5 11h11.15L13.3 8.15q-.3-.3-.288-.7t.288-.7q.3-.3.713-.312t.712.287L19.3 11.3q.15.15.213.325t.062.375q0 .2-.062.375t-.213.325l-4.575 4.575q-.3.3-.712.288t-.713-.313q-.275-.3-.288-.7t.288-.7z"
-					/></svg
+			<form on:submit|preventDefault={nextQuestion}>
+				<button
+					type="submit"
+					disabled={!showAnswer}
+					autofocus
+					class="flex scale-100 transform rounded-full border-2 border-gray-400 bg-gray-400/10 p-2 shadow-md transition duration-100 ease-in-out hover:bg-gray-400/20 active:scale-90 disabled:cursor-not-allowed"
 				>
-			</button>
+					<span>Next</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+						><path
+							fill="currentColor"
+							d="M16.15 13H5q-.425 0-.712-.288T4 12q0-.425.288-.712T5 11h11.15L13.3 8.15q-.3-.3-.288-.7t.288-.7q.3-.3.713-.312t.712.287L19.3 11.3q.15.15.213.325t.062.375q0 .2-.062.375t-.213.325l-4.575 4.575q-.3.3-.712.288t-.713-.313q-.275-.3-.288-.7t.288-.7z"
+						/></svg
+					>
+				</button>
+			</form>
 		{/if}
 	</div>
 </div>
