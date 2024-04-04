@@ -2,6 +2,22 @@
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 	import { game } from '$lib/game.svelte';
+
+	let dialog: HTMLDialogElement;
+
+	const handleDialog = () => {
+		console.log(dialog.returnValue);
+		const value = dialog.returnValue;
+
+		if (value === 'exact-match') {
+			game.startNew('exact-match');
+		} else if (value === 'multiple-choice') {
+			game.startNew('multiple-choice');
+		}
+
+		goto(`${base}/game`);
+		dialog.close();
+	};
 </script>
 
 <main class="mx-auto flex min-h-svh max-w-screen-xl flex-col items-center py-4">
@@ -13,10 +29,7 @@
 		<img class="max-w-lg" src="{base}/landing-page.jpg" alt="a lot of flags" />
 		<div class="flex flex-col gap-2">
 			<button
-				on:click={() => {
-					game.reset();
-					goto(`${base}/game`);
-				}}
+				on:click={() => dialog.showModal()}
 				class="scale-100 transform rounded-lg border-2 border-yellow-400 bg-yellow-400/10 p-2 shadow-md transition duration-100 ease-in-out hover:bg-yellow-400/20 active:scale-90"
 				>New Game</button
 			>
@@ -30,3 +43,22 @@
 		</div>
 	</div>
 </main>
+
+<dialog
+	class="absolute inset-0 p-4 backdrop:bg-black/60"
+	bind:this={dialog}
+	on:close={handleDialog}
+>
+	<h1>Select a game mode</h1>
+	<form class="mt-4 flex gap-2" method="dialog">
+		<button class="rounded bg-gray-300 p-2" value="cancel" formmethod="dialog">Cancel</button>
+		<button
+			class="scale-100 transform rounded-lg border-2 border-yellow-400 bg-yellow-400/10 p-2 shadow-md transition duration-100 ease-in-out hover:cursor-pointer hover:bg-yellow-400/20 active:scale-90"
+			value="multiple-choice">Multiple Choice</button
+		>
+		<button
+			class="scale-100 transform rounded-lg border-2 border-yellow-400 bg-yellow-400/10 p-2 shadow-md transition duration-100 ease-in-out hover:cursor-pointer hover:bg-yellow-400/20 active:scale-90"
+			value="exact-match">Expert</button
+		>
+	</form>
+</dialog>

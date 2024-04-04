@@ -1,7 +1,5 @@
 import flagCodesData from '$lib/codes/fr.json';
 
-export const flagCodes = flagCodesData;
-
 function shuffleArray<T>(array: T[]): T[] {
 	for (let i = array.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1));
@@ -10,24 +8,34 @@ function shuffleArray<T>(array: T[]): T[] {
 	return array;
 }
 
+type GameMode = 'multiple-choice' | 'exact-match';
+
 export class Game {
 	#storageKey = 'game';
 
+	mode: GameMode;
 	current: number = $state(0);
 	questions: Question[] = $state<Question[]>([]);
 	right: Question[] = $state<Question[]>([]);
 	wrong: Question[] = $state<Question[]>([]);
+	countryNames: string[] = $state<string[]>([]);
 
-	constructor() {
+	constructor(mode: GameMode = 'multiple-choice') {
+		this.mode = mode;
+		this.countryNames = Object.values(flagCodesData);
+
 		const fromStorage = localStorage.getItem(this.#storageKey);
 		if (fromStorage) {
-			const [questions, current, right, wrong] = fromStorage.split('|');
-			if (!questions || !current || !right || !wrong) {
+			const [mode, questions, current, right, wrong] = fromStorage.split('|');
+			if (!mode || !questions || !current || !right || !wrong) {
 				console.log('Bad game state, need to reset');
 				this.reset();
 				return;
 			}
 
+			console.log('Game state loaded from local storage');
+
+			this.mode = mode as GameMode;
 			this.questions = JSON.parse(questions);
 			this.current = parseInt(current);
 			this.right = JSON.parse(right);
@@ -42,7 +50,7 @@ export class Game {
 	}
 
 	#generateQuestions() {
-		const countryFlags: [string, string][] = Object.entries(flagCodes);
+		const countryFlags: [string, string][] = Object.entries(flagCodesData);
 		const questions: Question[] = [];
 
 		shuffleArray(countryFlags);
@@ -75,7 +83,7 @@ export class Game {
 	}
 
 	toString() {
-		return `${JSON.stringify(this.questions)}|${this.current}|${JSON.stringify(this.right)}|${JSON.stringify(this.wrong)}`;
+		return `${this.mode}|${JSON.stringify(this.questions)}|${this.current}|${JSON.stringify(this.right)}|${JSON.stringify(this.wrong)}`;
 	}
 
 	reset(mode: 'incorrect-only' | 'default' = 'default') {
@@ -94,12 +102,18 @@ export class Game {
 		this.#saveState();
 	}
 
+	startNew(mode: GameMode) {
+		this.mode = mode;
+		this.reset();
+	}
+
 	selectAnswer(answer: string) {
 		if (answer === this.currentQuestion.answer.name) {
 			this.right.push(this.currentQuestion);
 		} else {
 			this.wrong.push(this.currentQuestion);
 		}
+		this.#saveState();
 	}
 
 	nextQuestion() {

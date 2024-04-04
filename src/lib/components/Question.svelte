@@ -6,6 +6,8 @@
 	let imageSrc = $derived(`${base}/svg/${question.answer.code}.svg`);
 	let showAnswer = $state(false);
 	let choosed = $state<string | undefined>(undefined);
+	let countryInputValue = $state<string>('');
+	let showDatalist = $derived(countryInputValue.length > 0);
 
 	const handleClick = (choice: string) => {
 		showAnswer = true;
@@ -13,10 +15,16 @@
 		game.selectAnswer(choice);
 	};
 
+	const handleInputSubmit = () => {
+		showAnswer = true;
+		game.selectAnswer(countryInputValue);
+	};
+
 	const nextQuestion = () => {
 		if (!showAnswer) return;
 		showAnswer = false;
 		choosed = undefined;
+		countryInputValue = '';
 		game.nextQuestion();
 	};
 </script>
@@ -25,26 +33,81 @@
 	<h1 class="text-center text-xl font-semibold leading-10 md:text-3xl">What flag is this?</h1>
 	<div class="flex w-full flex-col items-center gap-4">
 		<img class="max-w-xs border-2 border-black/30 p-2 md:max-w-xl" src={imageSrc} alt="flag" />
-		<div class="grid grid-cols-3 gap-2">
-			{#each question.choices as choice}
-				<button
-					disabled={showAnswer}
-					class="scale-100 transform rounded-lg border-2 p-2 shadow-md transition duration-100 ease-in-out hover:cursor-pointer active:scale-90
+
+		{#if game.mode === 'multiple-choice'}
+			<div class="grid grid-cols-3 gap-2">
+				{#each question.choices as choice}
+					<button
+						disabled={showAnswer}
+						class="scale-100 transform rounded-lg border-2 p-2 shadow-md transition duration-100 ease-in-out hover:cursor-pointer active:scale-90
 					{!showAnswer && 'border-yellow-400 bg-yellow-400/10 hover:bg-yellow-400/20'}
 					{showAnswer &&
-						choice === question.answer.name &&
-						'border-green-500 bg-green-500/10 hover:bg-green-500/20'}
+							choice === question.answer.name &&
+							'border-green-500 bg-green-500/10 hover:bg-green-500/20'}
 					{showAnswer &&
-						choosed === choice &&
-						choice !== question.answer.name &&
-						'border-red-500 bg-red-500/10 hover:bg-red-500/20'}
+							choosed === choice &&
+							choice !== question.answer.name &&
+							'border-red-500 bg-red-500/10 hover:bg-red-500/20'}
 					"
-					on:click={() => handleClick(choice)}
+						on:click={() => handleClick(choice)}
+					>
+						{choice}
+					</button>
+				{/each}
+			</div>
+		{:else if !showAnswer}
+			<form class="flex flex-col items-center gap-y-2" on:submit|preventDefault={handleInputSubmit}>
+				<div class="relative">
+					<input
+						type="text"
+						list="countries"
+						autocomplete="off"
+						bind:value={countryInputValue}
+						class="w-full rounded-lg border-yellow-400 bg-yellow-400/10 pe-10 shadow-sm focus:border-yellow-400 focus:ring-yellow-400 sm:text-sm [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-list-button]:hidden [&::-webkit-list-button]:opacity-0"
+					/>
+					<span class="absolute inset-y-0 end-0 flex w-8 items-center">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="size-5 text-black/70"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+							/>
+						</svg>
+					</span>
+				</div>
+				{#if showDatalist}
+					<datalist id="countries">
+						{#each game.countryNames as country}
+							<option value={country} />
+						{/each}
+					</datalist>
+				{/if}
+
+				<button
+					type="submit"
+					class="{!countryInputValue.length
+						? 'hidden'
+						: 'block'} scale-100 transform rounded-lg border-2 border-yellow-400 bg-yellow-400/10 p-2 shadow-md transition duration-100 ease-in-out hover:cursor-pointer hover:bg-yellow-400/20 active:scale-90"
+					>Verify</button
 				>
-					{choice}
-				</button>
-			{/each}
-		</div>
+			</form>
+		{:else}
+			<p
+				class="rounded-lg p-2 text-lg font-semibold {question.answer.name === countryInputValue
+					? 'bg-green-500/60'
+					: 'bg-red-500/60'}"
+			>
+				{question.answer.name}
+			</p>
+		{/if}
+
 		{#if showAnswer}
 			<button
 				disabled={!showAnswer}

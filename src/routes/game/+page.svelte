@@ -5,6 +5,8 @@
 	let resetDialog: HTMLDialogElement;
 	let incorrectOnlyDialog: HTMLDialogElement;
 
+	$inspect(game.mode);
+
 	const currentQuestion = $derived(game.questions[game.current]);
 
 	function handleIncorrectOnlyResetDialog() {
