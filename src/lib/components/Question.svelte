@@ -16,6 +16,7 @@
 	};
 
 	const handleInputSubmit = () => {
+		if (!countryInputValue) return;
 		game.selectAnswer(countryInputValue);
 		showAnswer = true;
 		choosed = countryInputValue;
