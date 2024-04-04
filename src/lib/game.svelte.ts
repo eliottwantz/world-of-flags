@@ -8,6 +8,10 @@ function shuffleArray<T>(array: T[]): T[] {
 	return array;
 }
 
+const normalize = (input: string): string => {
+	return input.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+};
+
 type GameMode = 'multiple-choice' | 'exact-match';
 
 export class Game {
@@ -19,10 +23,12 @@ export class Game {
 	right: Question[] = $state<Question[]>([]);
 	wrong: Question[] = $state<Question[]>([]);
 	countryNames: string[] = $state<string[]>([]);
+	countryNamesNormalized: string[] = $state<string[]>([]);
 
 	constructor(mode: GameMode = 'multiple-choice') {
 		this.mode = mode;
 		this.countryNames = Object.values(flagCodesData);
+		this.countryNamesNormalized = Object.values(flagCodesData).map(normalize);
 
 		const fromStorage = localStorage.getItem(this.#storageKey);
 		if (fromStorage) {
@@ -70,6 +76,7 @@ export class Game {
 			questions.push({
 				answer: {
 					name: countryName,
+					normalized: normalize(countryName).toLowerCase(),
 					code: countryCode
 				},
 				choices
@@ -108,7 +115,7 @@ export class Game {
 	}
 
 	selectAnswer(answer: string) {
-		if (answer.trim().toLowerCase() === this.currentQuestion.answer.name.toLowerCase()) {
+		if (normalize(answer.trim().toLowerCase()) === this.currentQuestion.answer.normalized) {
 			this.right.push(this.currentQuestion);
 		} else {
 			this.wrong.push(this.currentQuestion);

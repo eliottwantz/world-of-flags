@@ -68,6 +68,7 @@
 						list="countries"
 						autocomplete="off"
 						autofocus
+						size="10"
 						bind:value={countryInputValue}
 						class="w-full rounded-lg border-yellow-400 bg-yellow-400/10 pe-10 shadow-sm focus:border-yellow-400 focus:ring-yellow-400 sm:text-sm [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-list-button]:hidden [&::-webkit-list-button]:opacity-0"
 					/>
@@ -91,7 +92,10 @@
 				{#if showDatalist}
 					<datalist id="countries">
 						{#each game.countryNames as country}
-							<option value={country} />
+							<option
+								value={country}
+								label={game.countryNamesNormalized[game.countryNames.indexOf(country)]}
+							/>
 						{/each}
 					</datalist>
 				{/if}
