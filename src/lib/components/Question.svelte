@@ -7,7 +7,7 @@
 	let showAnswer = $state(false);
 	let choosed = $state<string | undefined>(undefined);
 	let countryInputValue = $state<string>('');
-	let showDatalist = $derived(countryInputValue.length > 0);
+	let showDatalist = $derived(countryInputValue.length > 1);
 
 	const handleClick = (choice: string) => {
 		game.selectAnswer(choice);
@@ -105,7 +105,8 @@
 			</form>
 		{:else}
 			<p
-				class="rounded-lg p-2 text-lg font-semibold {question.answer.name === countryInputValue
+				class="rounded-lg p-2 text-lg font-semibold {question.answer.name.toLowerCase() ===
+				countryInputValue.trim().toLowerCase()
 					? 'bg-green-500/60'
 					: 'bg-red-500/60'}"
 			>

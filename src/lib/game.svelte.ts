@@ -108,12 +108,11 @@ export class Game {
 	}
 
 	selectAnswer(answer: string) {
-		if (answer === this.currentQuestion.answer.name) {
+		if (answer.trim().toLowerCase() === this.currentQuestion.answer.name.toLowerCase()) {
 			this.right.push(this.currentQuestion);
 		} else {
 			this.wrong.push(this.currentQuestion);
 		}
-		this.#saveState();
 	}
 
 	nextQuestion() {
