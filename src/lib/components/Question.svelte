@@ -8,6 +8,11 @@
 	let choosed = $state<string | undefined>(undefined);
 	let countryInputValue = $state<string>('');
 	let showDatalist = $derived(countryInputValue.length > 1);
+	let isMobile = $state(false);
+
+	$effect(() => {
+		isMobile = window.innerWidth <= 768;
+	});
 
 	const handleClick = (choice: string) => {
 		game.selectAnswer(choice);
@@ -67,7 +72,7 @@
 						type="text"
 						list="countries"
 						autocomplete="off"
-						autofocus
+						autofocus={!isMobile}
 						size="10"
 						bind:value={countryInputValue}
 						class="w-full rounded-lg border-yellow-400 bg-yellow-400/10 pe-10 shadow-sm focus:border-yellow-400 focus:ring-yellow-400 sm:text-sm [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-list-button]:hidden [&::-webkit-list-button]:opacity-0"
