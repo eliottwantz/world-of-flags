@@ -1,13 +1,10 @@
 <script lang="ts">
 	import geojsonData from '$lib/geojson/countries.json';
-	import type { GeoJsonObject } from 'geojson';
 	import L, { type LeafletMouseEventHandlerFn } from 'leaflet';
 	import 'leaflet/dist/leaflet.css';
-
-	let mapL = $state<L.Map | undefined>(undefined);
+	import flagCodesData from '$lib/codes/fr.json';
 
 	$effect(() => {
-		console.log(geojsonData);
 		const map = L.map('map');
 		map.setView([15, 0], 2);
 
@@ -26,8 +23,6 @@
 				});
 			}
 		}).addTo(map);
-
-		mapL = map;
 	});
 
 	const handleClick: LeafletMouseEventHandlerFn = (event) => {
@@ -36,7 +31,7 @@
 			ISO_A3: string;
 			ISO_A2: string;
 		};
-		console.log('Clicked country:', properties.ADMIN);
+		console.log('Clicked country:', flagCodesData[properties.ISO_A2.toLowerCase()]);
 	};
 </script>
 
