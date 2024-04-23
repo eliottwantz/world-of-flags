@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { game } from '$lib/game.svelte';
-	import { base } from '$app/paths';
 
 	let { question }: { question: Question } = $props();
-	let imageSrc = $derived(`${base}/svg/${question.answer.code}.svg`);
+	let imageSrc = $derived(`/svg/${question.answer.code}.svg`);
 	let showAnswer = $state(false);
 	let choosed = $state<string | undefined>(undefined);
 	let countryInputValue = $state<string>('');
