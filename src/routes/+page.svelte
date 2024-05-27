@@ -39,6 +39,13 @@
 				class="scale-100 transform rounded-lg border-2 border-yellow-400/60 bg-yellow-400/10 p-2 shadow-md transition duration-100 ease-in-out hover:bg-yellow-400/20 active:scale-90"
 				>Resume</button
 			>
+			<button
+				on:click={() => {
+					goto('/world');
+				}}
+				class="scale-100 transform rounded-lg border-2 border-yellow-400/60 bg-yellow-400/10 p-2 shadow-md transition duration-100 ease-in-out hover:bg-yellow-400/20 active:scale-90"
+				>Place countries</button
+			>
 		</div>
 	</div>
 </main>

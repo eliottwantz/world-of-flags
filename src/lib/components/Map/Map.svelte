@@ -1,5 +1,5 @@
 <script lang="ts">
-	import geojsonData from '$lib/geojson/countries.json';
+	import countries from '$lib/geojson/countries.json';
 	import L, { type LeafletMouseEventHandlerFn } from 'leaflet';
 	import 'leaflet/dist/leaflet.css';
 	import flagCodesData from '$lib/codes/fr.json';
@@ -16,7 +16,7 @@
 		}).addTo(map);
 
 		//@ts-ignore
-		L.geoJSON(geojsonData.features, {
+		L.geoJSON(countries.features, {
 			onEachFeature: (feature, layer) => {
 				layer.on({
 					click: handleClick
@@ -25,13 +25,16 @@
 		}).addTo(map);
 	});
 
-	const handleClick: LeafletMouseEventHandlerFn = (event) => {
-		const properties = event.target.feature.properties as {
-			ADMIN: string;
-			ISO_A3: string;
-			ISO_A2: string;
-		};
-		console.log('Clicked country:', flagCodesData[properties.ISO_A2.toLowerCase()]);
+	const handleClick: LeafletMouseEventHandlerFn = (e) => {
+		console.log(e);
+
+		const properties = e.target.feature
+			.properties as (typeof countries)['features'][0]['properties'];
+		console.log(
+			'Clicked country:',
+			//@ts-expect-error
+			isNaN(properties.ISO_A2) ? flagCodesData[properties.ISO_A2.toLowerCase()] : properties.NAME
+		);
 	};
 </script>
 
