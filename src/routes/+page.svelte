@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<title>Flag Master - Test Your Knowledge</title>
+	<title>World of Flags</title>
 </svelte:head>
 
 <FlagGame />

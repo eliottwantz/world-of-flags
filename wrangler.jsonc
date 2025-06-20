@@ -14,7 +14,13 @@
 	},
 	"observability": {
 		"enabled": true
-	}
+	},
+	"routes": [
+		{
+			"custom_domain": true,
+			"pattern": "flags.develiott.com"
+		}
+	]
 	/**
 	 * Smart Placement
 	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
