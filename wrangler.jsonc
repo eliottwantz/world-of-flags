@@ -5,11 +5,12 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "world-of-flags",
-	"main": ".svelte-kit/cloudflare/_worker.js",
+	// "main": ".svelte-kit/cloudflare/_worker.js",
 	"compatibility_date": "2025-06-20",
 	"assets": {
-		"binding": "ASSETS",
-		"directory": ".svelte-kit/cloudflare"
+		"directory": "build"
+		// "binding": "ASSETS",
+		// "directory": ".svelte-kit/cloudflare"
 	},
 	"observability": {
 		"enabled": true
