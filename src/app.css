@@ -1,0 +1,97 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+
+/* Custom animations and styles */
+@keyframes pulse-subtle {
+	0%, 100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.8;
+	}
+}
+
+@keyframes bounce-in {
+	0% {
+		transform: scale(0.3);
+		opacity: 0;
+	}
+	50% {
+		transform: scale(1.05);
+	}
+	70% {
+		transform: scale(0.9);
+	}
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+@keyframes slide-up {
+	from {
+		transform: translateY(100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+.animate-pulse-subtle {
+	animation: pulse-subtle 1s ease-in-out infinite;
+}
+
+.animate-bounce-in {
+	animation: bounce-in 0.3s ease-out;
+}
+
+.animate-slide-up {
+	animation: slide-up 0.25s ease-out;
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+	transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	transition-duration: 100ms;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: #f1f5f9;
+	border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #cbd5e1;
+	border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #94a3b8;
+}
+
+/* Focus styles for accessibility */
+button:focus-visible,
+a:focus-visible {
+	outline: 2px solid #EFB100;
+	outline-offset: 2px;
+}
+
+/* Loading spinner enhancement */
+.spinner {
+	border-top-color: transparent;
+	animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
