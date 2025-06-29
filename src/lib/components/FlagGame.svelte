@@ -252,11 +252,11 @@
 			<!-- Flag Display -->
 			<div class="mb-8 text-center">
 				<div class="relative inline-block">
-					{#key gameState.currentQuestion}
+					{#key currentQuestion.country.cca3}
 						<img
 							src={currentQuestion.country.flags.svg}
 							alt="Flag"
-							class="mx-auto max-h-96 rounded-xl object-contain shadow-lg"
+							class="w-full max-h-96 rounded-xl object-contain shadow-lg"
 							in:scale={{ duration: 400, easing: backOut }}
 						/>
 					{/key}
@@ -288,7 +288,7 @@
 			<!-- Answer Options -->
 			<div class="grid grid-cols-2 gap-4">
 				{#each currentQuestion.options as option, index}
-					{#key gameState.currentQuestion}
+					{#key option.cca3}
 						<button
 							onclick={() => selectAnswer(getCountryName(option, selectedLanguage))}
 							disabled={showingResult}
