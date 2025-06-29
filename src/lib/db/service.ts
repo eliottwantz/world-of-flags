@@ -1,102 +1,73 @@
-import { type GameStatType, db } from "./index";
+import { db } from '$lib/db';
+import type { GameState, GameStats, StatsData } from '$lib/types';
 
-/**
- * Save a new game stat to the database
- */
-export async function saveGameStat(
-	data: Omit<GameStatType, "id">,
-): Promise<GameStatType> {
-	const id = await db.gameStats.add(data);
-	const savedStat = await db.gameStats.get(id);
-	if (!savedStat) {
-		throw new Error("Failed to save game stat");
+export const saveGameStats = async (gameState: GameState) => {
+	const { score, questions, startTime } = gameState;
+	const totalQuestions = questions.length;
+	const accuracy = (score / totalQuestions) * 100;
+	const timeTaken = (Date.now() - startTime) / 1000;
+	const completedAt = new Date().toISOString();
+	const isWin = score > totalQuestions / 2;
+
+	await db.gameStats.add({
+		score,
+		totalQuestions,
+		accuracy,
+		timeTaken,
+		completedAt,
+		isWin
+	});
+};
+
+export const getStatsData = async (): Promise<StatsData> => {
+	const recentGames = await db.gameStats.orderBy('completedAt').reverse().toArray();
+	const totalGames = recentGames.length;
+
+	if (totalGames === 0) {
+		return {
+			recentGames: [],
+			aggregates: {
+				totalGames: 0,
+				totalWins: 0,
+				winRate: 0,
+				averageScore: 0,
+				averageAccuracy: 0,
+				averageTime: 0,
+				bestScore: 0,
+				bestAccuracy: 0,
+				fastestTime: 0
+			}
+		};
 	}
-	return savedStat;
-}
 
-/**
- * Get all game stats ordered by completion date (newest first)
- */
-export async function getAllGameStats(): Promise<GameStatType[]> {
-	return await db.gameStats.orderBy("completedAt").reverse().toArray();
-}
+	const totalWins = recentGames.filter((game) => game.isWin).length;
+	const winRate = (totalWins / totalGames) * 100;
 
-/**
- * Get recent game stats (limit 10)
- */
-export async function getRecentGameStats(limit = 10): Promise<GameStatType[]> {
-	return await db.gameStats
-		.orderBy("completedAt")
-		.reverse()
-		.limit(limit)
-		.toArray();
-}
+	const totalScore = recentGames.reduce((sum, game) => sum + game.score, 0);
+	const averageScore = totalScore / totalGames;
 
-/**
- * Get aggregate statistics
- */
-export async function getAggregateStats() {
-	const allStats = await getAllGameStats();
+	const totalAccuracy = recentGames.reduce((sum, game) => sum + game.accuracy, 0);
+	const averageAccuracy = totalAccuracy / totalGames;
 
-	const totalGames = allStats.length;
-	const totalWins = allStats.filter((stat) => stat.isWin).length;
-	const winRate = totalGames > 0 ? (totalWins / totalGames) * 100 : 0;
+	const totalTime = recentGames.reduce((sum, game) => sum + game.timeTaken, 0);
+	const averageTime = totalTime / totalGames;
 
-	const averageScore =
-		totalGames > 0
-			? allStats.reduce((sum, stat) => sum + stat.score, 0) / totalGames
-			: 0;
-
-	const averageAccuracy =
-		totalGames > 0
-			? allStats.reduce((sum, stat) => sum + stat.accuracy, 0) / totalGames
-			: 0;
-
-	const averageTime =
-		totalGames > 0
-			? allStats.reduce((sum, stat) => sum + stat.timeTaken, 0) / totalGames
-			: 0;
-
-	const bestScore =
-		allStats.length > 0 ? Math.max(...allStats.map((s) => s.score)) : 0;
-
-	const bestAccuracy =
-		allStats.length > 0 ? Math.max(...allStats.map((s) => s.accuracy)) : 0;
-
-	const fastestTime =
-		allStats.length > 0 ? Math.min(...allStats.map((s) => s.timeTaken)) : 0;
-
-	return {
-		totalGames,
-		totalWins,
-		winRate,
-		averageScore,
-		averageAccuracy,
-		averageTime,
-		bestScore,
-		bestAccuracy,
-		fastestTime,
-	};
-}
-
-/**
- * Delete all game stats (for testing purposes)
- */
-export async function clearAllStats(): Promise<void> {
-	await db.gameStats.clear();
-}
-
-/**
- * Get stats data in the format expected by the UI
- */
-export async function getStatsData() {
-	const [recentGames, aggregates] = await Promise.all([
-		getRecentGameStats(),
-		getAggregateStats(),
-	]);
+	const bestScore = Math.max(...recentGames.map((game) => game.score));
+	const bestAccuracy = Math.max(...recentGames.map((game) => game.accuracy));
+	const fastestTime = Math.min(...recentGames.map((game) => game.timeTaken));
 
 	return {
 		recentGames,
-		aggregates,
+		aggregates: {
+			totalGames,
+			totalWins,
+			winRate,
+			averageScore,
+			averageAccuracy,
+			averageTime,
+			bestScore,
+			bestAccuracy,
+			fastestTime
+		}
 	};
-}
+};

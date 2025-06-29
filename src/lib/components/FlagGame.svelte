@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { fetchCountries, generateGameQuestions, getCountryName } from '$lib/api';
 	import type { Country, GameState, Language } from '$lib/types';
-	import { saveGameStat } from '$lib/db/service';
+	import { saveGameStats } from '$lib/db/service';
 	import { onMount } from 'svelte';
 	import { backOut, quintOut } from 'svelte/easing';
 	import { fade, fly, scale } from 'svelte/transition';
+
+	const GAME_STATE_KEY = 'gameState';
 
 	let gameState = $state<GameState>({
 		currentQuestion: 0,
@@ -25,11 +27,32 @@
 
 	onMount(async () => {
 		try {
+			const savedState = localStorage.getItem(GAME_STATE_KEY);
+			if (savedState) {
+				gameState = JSON.parse(savedState);
+				gameStarted = true;
+			}
+		} catch (error) {
+			console.error('Failed to load saved game state:', error);
+			localStorage.removeItem(GAME_STATE_KEY);
+		}
+
+		try {
 			countries = await fetchCountries();
 			loading = false;
 		} catch (error) {
 			console.error('Failed to load countries:', error);
 			loading = false;
+		}
+	});
+
+	$effect(() => {
+		if (gameStarted && !gameState.isGameComplete) {
+			try {
+				localStorage.setItem(GAME_STATE_KEY, JSON.stringify(gameState));
+			} catch (error) {
+				console.error('Failed to save game state:', error);
+			}
 		}
 	});
 
@@ -79,28 +102,14 @@
 
 	async function endGame() {
 		gameState.isGameComplete = true;
-		const timeTaken = Math.floor((Date.now() - gameState.startTime) / 1000);
-		const accuracy = (gameState.score / gameState.questions.length) * 100;
-		const isWin = gameState.score >= 7; // 70% or higher is a win
-
-		// Save stats to IndexedDB using Dexie
-		try {
-			await saveGameStat({
-				score: gameState.score,
-				totalQuestions: gameState.questions.length,
-				accuracy,
-				timeTaken,
-				completedAt: new Date().toISOString(),
-				isWin
-			});
-		} catch (error) {
-			console.error('Failed to save game stats:', error);
-		}
+		await saveGameStats(gameState);
+		localStorage.removeItem(GAME_STATE_KEY);
 	}
 
 	function restartGame() {
 		gameStarted = false;
 		gameState.isGameComplete = false;
+		localStorage.removeItem(GAME_STATE_KEY);
 	}
 
 	let currentQuestion = $derived(gameState.questions[gameState.currentQuestion]);

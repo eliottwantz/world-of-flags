@@ -1,24 +1,15 @@
-import Dexie, { type EntityTable } from "dexie";
+import Dexie, { type Table } from 'dexie';
+import type { GameStats } from '$lib/types';
 
-export interface GameStat {
-	id?: number;
-	score: number;
-	totalQuestions: number;
-	accuracy: number;
-	timeTaken: number; // in seconds
-	completedAt: string;
-	isWin: boolean;
+export class WorldOfFlagsDB extends Dexie {
+	gameStats!: Table<GameStats>;
+
+	constructor() {
+		super('WorldOfFlagsDB');
+		this.version(1).stores({
+			gameStats: '++id, score, totalQuestions, accuracy, timeTaken, completedAt, isWin'
+		});
+	}
 }
 
-const db = new Dexie("FlagGameDB") as Dexie & {
-	gameStats: EntityTable<GameStat, "id">;
-};
-
-// Schema
-db.version(1).stores({
-	gameStats:
-		"++id, score, totalQuestions, accuracy, timeTaken, completedAt, isWin",
-});
-
-export type { GameStat as GameStatType };
-export { db };
+export const db = new WorldOfFlagsDB();

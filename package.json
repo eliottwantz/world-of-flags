@@ -33,6 +33,6 @@
 		"vite-plugin-devtools-json": "^0.2.0"
 	},
 	"dependencies": {
-		"dexie": "^4.0.9"
+		"dexie": "^4.0.11"
 	}
 }
