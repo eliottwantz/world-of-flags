@@ -1,9 +1,14 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 
+body {
+	@apply h-dvh bg-amber-100;
+}
+
 /* Custom animations and styles */
 @keyframes pulse-subtle {
-	0%, 100% {
+	0%,
+	100% {
 		opacity: 1;
 	}
 	50% {
@@ -53,7 +58,9 @@
 
 /* Smooth transitions for all interactive elements */
 * {
-	transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+	transition-property:
+		color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow,
+		transform, filter, backdrop-filter;
 	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 	transition-duration: 100ms;
 }
@@ -80,7 +87,7 @@
 /* Focus styles for accessibility */
 button:focus-visible,
 a:focus-visible {
-	outline: 2px solid #EFB100;
+	outline: 2px solid #efb100;
 	outline-offset: 2px;
 }
 

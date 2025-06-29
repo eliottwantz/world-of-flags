@@ -4,7 +4,7 @@
 	let { children } = $props();
 </script>
 
-<main class="h-dvh bg-gradient-to-br from-yellow-50 to-amber-100">
+<main class="h-dvh">
 	{@render children()}
 </main>
 
