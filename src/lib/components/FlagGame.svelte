@@ -172,12 +172,20 @@
 				alt="Landing page"
 				class="mb-8 rounded-xl shadow-lg max-w-full max-h-[480px]"
 			/>
-			<button
-				onclick={startGame}
-				class="transform rounded-xl bg-yellow-500 px-8 py-4 text-lg font-bold text-white shadow-lg transition-all duration-150 hover:scale-105 hover:bg-yellow-600 hover:shadow-xl"
-			>
-				Start Game
-			</button>
+			<div class="flex justify-center space-x-4">
+				<button
+					onclick={startGame}
+					class="transform rounded-xl bg-yellow-500 px-8 py-4 text-lg font-bold text-white shadow-lg transition-all duration-150 hover:scale-105 hover:bg-yellow-600 hover:shadow-xl"
+				>
+					Start Game
+				</button>
+				<a
+					href="/stats"
+					class="transform rounded-xl bg-gray-200 px-8 py-4 text-lg font-bold text-gray-800 shadow-lg transition-all duration-150 hover:scale-105 hover:bg-gray-300 hover:shadow-xl"
+				>
+					View Stats
+				</a>
+			</div>
 		</div>
 	{:else if gameState.isGameComplete}
 		<div class="max-w-md text-center" in:scale={{ duration: 500, easing: backOut }}>
