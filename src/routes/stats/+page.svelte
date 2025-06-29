@@ -52,7 +52,7 @@
 	<title>World of Flags - Statistics</title>
 </svelte:head>
 
-<div class="min-h-screen bg-gradient-to-br from-yellow-50 to-amber-100 px-4 py-8">
+<div class="min-h-dvh px-4 py-8">
 	<div class="mx-auto max-w-6xl">
 		<!-- Header -->
 		<div class="mb-8 text-center" in:fade={{ duration: 300 }}>
