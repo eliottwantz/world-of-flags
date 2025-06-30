@@ -116,9 +116,7 @@
 	let progress = $derived(((gameState.currentQuestion + 1) / gameState.questions.length) * 100);
 </script>
 
-<div
-	class="flex h-full w-full max-w-full mx-auto items-center justify-center p-4"
->
+<div class="mx-auto flex h-full w-full max-w-full items-center justify-center p-4">
 	{#if loading}
 		<div class="text-center" in:fade={{ duration: 200 }}>
 			<div
@@ -170,7 +168,7 @@
 			<img
 				src="/landing-page.jpg"
 				alt="Landing page"
-				class="mb-8 rounded-xl shadow-lg max-w-full max-h-[480px]"
+				class="mb-8 max-h-[480px] max-w-full rounded-xl shadow-lg"
 			/>
 			<div class="flex justify-center space-x-4">
 				<button
@@ -256,7 +254,7 @@
 						<img
 							src={currentQuestion.country.flags.svg}
 							alt="Flag"
-							class="w-full max-h-96 rounded-xl object-contain shadow-lg"
+							class="max-h-96 w-full rounded-xl object-contain shadow-lg"
 							in:scale={{ duration: 400, easing: backOut }}
 						/>
 					{/key}
