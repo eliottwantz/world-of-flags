@@ -7,3 +7,5 @@
 </svelte:head>
 
 <FlagGame />
+
+<a href="/map">Go to Map Game</a>
