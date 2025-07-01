@@ -37,10 +37,17 @@
 	let map: maplibregl.Map | undefined = $state();
 	let highlightedCountryCca3: string | null = $state(null);
 	let highlightColor: string = $state('transparent');
+	let countryFeatures: any[] = $state([]);
 
 	onMount(async () => {
 		try {
-			countries = await fetchCountries();
+			const [fetchedCountries, geojsonResponse] = await Promise.all([
+				fetchCountries(),
+				fetch('/countries.geojson')
+			]);
+			countries = fetchedCountries;
+			const geojsonData = await geojsonResponse.json();
+			countryFeatures = geojsonData.features;
 
 			const savedStateJSON = localStorage.getItem(GAME_STATE_KEY);
 			if (savedStateJSON) {
@@ -127,12 +134,9 @@
 	function zoomToCountry(cca3: string) {
 		if (!map) return;
 
-		const features = map.querySourceFeatures('countries', {
-			filter: ['==', 'iso_a3', cca3]
-		});
+		const feature = countryFeatures.find((f) => f.properties.iso_a3 === cca3);
 
-		if (features.length > 0) {
-			const feature = features[0];
+		if (feature) {
 			const geometry = feature.geometry;
 
 			if (geometry.type === 'Polygon') {
@@ -146,7 +150,7 @@
 						coordinates[0] as [number, number]
 					)
 				);
-				map.fitBounds(bounds, { padding: 40, maxZoom: 4, duration: 1000 });
+				map.fitBounds(bounds, { padding: 40, maxZoom: 6, duration: 1000 });
 			} else if (geometry.type === 'MultiPolygon') {
 				const allCoords = geometry.coordinates.flat(2);
 				const bounds = allCoords.reduce(
@@ -158,7 +162,7 @@
 						allCoords[0] as [number, number]
 					)
 				);
-				map.fitBounds(bounds, { padding: 40, maxZoom: 4, duration: 1000 });
+				map.fitBounds(bounds, { padding: 40, maxZoom: 6, duration: 1000 });
 			}
 		}
 	}
@@ -189,6 +193,15 @@
 	}
 
 	function nextQuestion() {
+		if (map) {
+			map.flyTo({
+				center: [0, 20],
+				zoom: 1,
+				duration: 1000,
+				easing: quintOut
+			});
+		}
+
 		if (gameState.currentQuestion < gameState.questions.length - 1) {
 			gameState.currentQuestion++;
 			showingResult = false;
