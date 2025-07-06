@@ -336,10 +336,30 @@
 					View Stats
 				</a>
 			</div>
+
+			<div class="mt-6 flex justify-center space-x-4">
+				<a
+					href="/"
+					class="transform rounded-lg bg-yellow-500 px-4 py-2 text-sm font-bold text-white shadow-md transition-all duration-150 hover:scale-105 hover:bg-yellow-600"
+				>
+					🏳️ Flag Game
+				</a>
+				<a
+					href="/combined"
+					class="transform rounded-lg bg-purple-500 px-4 py-2 text-sm font-bold text-white shadow-md transition-all duration-150 hover:scale-105 hover:bg-purple-600"
+				>
+					🌎🗺️ Ultimate Challenge
+				</a>
+			</div>
 		</div>
 	{:else if currentQuestion}
 		<div class="h-full w-full">
-			<MapLibre bind:map class="h-full w-full cursor-pointer" style="/map-style.json" onclick={handleMapClick}>
+			<MapLibre
+				bind:map
+				class="h-full w-full cursor-pointer"
+				style="/map-style.json"
+				onclick={handleMapClick}
+			>
 				<GeoJSONSource id="countries" data="/countries.geojson">
 					<FillLayer
 						id="country-polygons"

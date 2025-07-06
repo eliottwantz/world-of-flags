@@ -184,6 +184,21 @@
 					View Stats
 				</a>
 			</div>
+
+			<div class="mt-6 flex justify-center space-x-4">
+				<a
+					href="/map"
+					class="transform rounded-lg bg-blue-500 px-4 py-2 text-sm font-bold text-white shadow-md transition-all duration-150 hover:scale-105 hover:bg-blue-600"
+				>
+					🗺️ Map Game
+				</a>
+				<a
+					href="/combined"
+					class="transform rounded-lg bg-purple-500 px-4 py-2 text-sm font-bold text-white shadow-md transition-all duration-150 hover:scale-105 hover:bg-purple-600"
+				>
+					🌎🗺️ Ultimate Challenge
+				</a>
+			</div>
 		</div>
 	{:else if gameState.isGameComplete}
 		<div class="max-w-md text-center" in:scale={{ duration: 500, easing: backOut }}>
